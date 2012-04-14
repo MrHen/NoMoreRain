@@ -1,0 +1,53 @@
+name: NoMoreRain
+main: com.mrhen.NoMoreRain.NoMoreRain
+version: 1
+
+commands:
+   nomorerain:
+      description: Used to suppress rain, thunder and lightning
+      usage: /<command> suppress [rain|thunder|lightning]
+      permission: nomorerain.suppress
+
+permissions:
+    nomorerain.*:
+        description: Gives access to all NoMoreRain commands
+        children:
+            nomorerain.suppress: true
+            nomorerain.suppress.lightning: true
+            nomorerain.suppress.rain: true
+            nomorerain.suppress.thunder: true
+            nomorerain.set: true
+            nomorerain.set.rain: true
+            nomorerain.set.thunder: true
+            nomorerain.debug: true
+    nomorerain.suppress:
+        description: Allows you to change weather suppression settings
+        default: op
+        children:
+            nomorerain.suppress.lightning: true
+            nomorerain.suppress.rain: true
+            nomorerain.suppress.thunder: true
+    nomorerain.suppress.lightning:
+        description: Allows you to change lightning suppression settings
+        default: op
+    nomorerain.suppress.thunder:
+        description: Allows you to change thunder suppression settings
+        default: op
+    nomorerain.suppress.rain:
+        description: Allows you to change rain suppression settings
+        default: op
+    nomorerain.set:
+        description: Allows you to change current weather patterns
+        default: op
+        children:
+            nomorerain.set.rain: true
+            nomorerain.set.thunder: true
+    nomorerain.set.rain:
+        description: Allows you to change whether it is raining
+        default: op
+    nomorerain.set.thundering:
+        description: Allows you to change whether it is thundering
+        default: op
+    nomorerain.debug:
+        description: Turns on very spammy debug messages
+        default: false
