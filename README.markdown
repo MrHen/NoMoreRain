@@ -3,10 +3,14 @@ Simple Minecraft plugin to be used with Bukkit 1.2.5 or later. The primary purpo
 completely disable thunderstorms and rain.
 
 ##Usage##
-Fire up the plugin with op and use the following command to disable all bad
+Fire up the plugin with op and use the following command to disable all rainy
 weather:
 
 */nomorerain suppress rain*
+
+If you don't mind rain but dislike thunderstorms:
+
+*/nomorerain suppress thunder*
 
 ##TODOs##
 
