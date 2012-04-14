@@ -32,6 +32,8 @@ public class NoMoreRain extends JavaPlugin implements Listener {
 
   protected static final String commandSuppress = "suppress";
 
+  protected static final String configSuppress = "nomorerain.suppress";
+
   protected static final String messagePrefix = "[NoMoreRain] ";
 
   protected static final String paramFalse = "0";
@@ -43,13 +45,7 @@ public class NoMoreRain extends JavaPlugin implements Listener {
   protected static final String paramThunder = "thunder";
   
   private HashSet<CommandSender> debugPlayers;
-  
-  private boolean suppressingLightning = false;
-  
-  private boolean suppressingRain = false;
-  
-  private boolean suppressingThunder = false;
-  
+    
   protected Logger log = null;
   
   public void onEnable(){ 
@@ -201,27 +197,29 @@ public class NoMoreRain extends JavaPlugin implements Listener {
 
   protected void suppressLightning(boolean suppress, CommandSender source) {
     this.sendOutput("Will " + (suppress ? "now" : "not") + " suppress lightning", source);
-    this.suppressingLightning = suppress;    
+    this.getConfig().set(NoMoreRain.configSuppress + "." + NoMoreRain.paramLightning, suppress);
   }
 
   protected void suppressRain(boolean suppress, CommandSender source) {
     this.sendOutput("Will " + (suppress ? "now" : "not") + " suppress rain", source);
-    this.suppressingRain = suppress;
+    this.getConfig().set(NoMoreRain.configSuppress + "." + NoMoreRain.paramRain, suppress);
     World world = this.getServer().getWorlds().get(0);
     if(world.hasStorm()) {
       this.sendOutput("Automatically stopping rain");
       world.setStorm(false);
     }
+    this.saveConfig();
   }
   
   protected void suppressThunder(boolean suppress, CommandSender source) {
     this.sendOutput("Will " + (suppress ? "now" : "not") + " suppress thunder", source);
-    this.suppressingThunder = suppress;
+    this.getConfig().set(NoMoreRain.configSuppress + "." + NoMoreRain.paramThunder, suppress);
     World world = this.getServer().getWorlds().get(0);
     if(world.isThundering()) {
       this.sendOutput("Automatically stopping thunder");
       world.setThundering(false);
     }
+    this.saveConfig();
   }
 
   /**
@@ -232,12 +230,13 @@ public class NoMoreRain extends JavaPlugin implements Listener {
    */
   @EventHandler(ignoreCancelled = true)
   public void onLightningStrike(LightningStrikeEvent event) {
-    if(this.suppressingLightning) {
+    if(this.getConfig().getBoolean(NoMoreRain.configSuppress + "." + NoMoreRain.paramLightning)) {
       this.sendOutput("Cancelling " + event.getEventName());
       event.setCancelled(true);
     } else {
       this.sendOutput("Allowing " + event.getEventName());
     }
+    this.saveConfig();
   }
 
   /**
@@ -249,7 +248,7 @@ public class NoMoreRain extends JavaPlugin implements Listener {
   @EventHandler(ignoreCancelled = true)
   public void onThunderChange(ThunderChangeEvent event) {
     if(event.toThunderState()) {
-      if(this.suppressingThunder) {
+      if(this.getConfig().getBoolean(NoMoreRain.configSuppress + "." + NoMoreRain.paramLightning)) {
         this.sendOutput("Cancelling " + event.getEventName() + " (detected thunder)");
         event.setCancelled(true);
       } else {
@@ -267,7 +266,7 @@ public class NoMoreRain extends JavaPlugin implements Listener {
   @EventHandler(ignoreCancelled = true)
   public void onWeatherChange(WeatherChangeEvent event) {
     if(event.toWeatherState()) {
-      if(this.suppressingRain) {
+      if(this.getConfig().getBoolean(NoMoreRain.configSuppress + "." + NoMoreRain.paramLightning)) {
         this.sendOutput("Cancelling " + event.getEventName() + " (detected rain)");
         event.setCancelled(true);
       } else {
