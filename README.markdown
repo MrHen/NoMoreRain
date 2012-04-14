@@ -13,3 +13,4 @@ weather:
 * Add full usage and syntax output
 * Add customized color support
 * Save debug list to config.yml
+* Using commands from the console gives you double messages
